@@ -1,89 +1,95 @@
 <script setup>
+import { reactive, toRefs } from 'vue';
+import { useStore } from 'vuex'
+import Loader from '../../components/partials/Loader.vue';
+import { useRouter } from 'vue-router';
+import { useToastMessage } from '../../composables/useToastMessage';
+
+// hooks
+const store = useStore();
+const router = useRouter();
+const { showToastMessage } = useToastMessage();
+
+// states
+const { isLoading, isSuccess, isError, error } = toRefs(store.state.auth.status.login);
+
+
+// local states
+const userData = reactive({
+    email: '',
+    password: '',
+})
+
+
+// methods
+
+const loginHandler = async () => {
+    console.log(userData);
+    if (userData.email && userData.password) {
+        await store.dispatch('auth/login', { username: userData.email, password: userData.password });
+        if (isSuccess.value) {
+            router.push({ name: 'home' });
+        }
+
+        return;
+    }
+    showToastMessage('error', 'Please fill all the fields');
+
+
+
+}
 
 </script>
 
 <template>
-    <body class="font-mono bg-gray-400">
-        <!-- Container -->
-        <div class="container mx-auto">
-            <div class="flex justify-center px-6 my-12">
-                <!-- Row -->
-                <div class="w-full xl:w-3/4 lg:w-11/12 flex">
-                    <!-- Col -->
-                    <div class="w-full h-auto bg-gray-400 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
-                        style="background-image: url('https://source.unsplash.com/Mv9hjnEUHR4/600x800')"></div>
-                    <!-- Col -->
-                    <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-                        <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
-                        <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
-                            <div class="mb-4 md:flex md:justify-between">
-                                <div class="mb-4 md:mr-2 md:mb-0">
-                                    <label class="block mb-2 text-sm font-bold text-gray-700" for="firstName">
-                                        First Name
-                                    </label>
-                                    <input
-                                        class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                        id="firstName" type="text" placeholder="First Name" />
-                                </div>
-                                <div class="md:ml-2">
-                                    <label class="block mb-2 text-sm font-bold text-gray-700" for="lastName">
-                                        Last Name
-                                    </label>
-                                    <input
-                                        class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                        id="lastName" type="text" placeholder="Last Name" />
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block mb-2 text-sm font-bold text-gray-700" for="email">
-                                    Email
-                                </label>
-                                <input
-                                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                    id="email" type="email" placeholder="Email" />
-                            </div>
-                            <div class="mb-4 md:flex md:justify-between">
-                                <div class="mb-4 md:mr-2 md:mb-0">
-                                    <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
-                                        Password
-                                    </label>
-                                    <input
-                                        class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                        id="password" type="password" placeholder="******************" />
-                                    <p class="text-xs italic text-red-500">Please choose a password.</p>
-                                </div>
-                                <div class="md:ml-2">
-                                    <label class="block mb-2 text-sm font-bold text-gray-700" for="c_password">
-                                        Confirm Password
-                                    </label>
-                                    <input
-                                        class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                        id="c_password" type="password" placeholder="******************" />
-                                </div>
-                            </div>
-                            <div class="mb-6 text-center">
-                                <button
-                                    class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                                    type="button">
-                                    Register Account
-                                </button>
-                            </div>
-                            <hr class="mb-6 border-t" />
-                            <div class="text-center">
-                                <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800" href="#">
-                                    Forgot Password?
-                                </a>
-                            </div>
-                            <div class="text-center">
-                                <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                                    href="./index.html">
-                                    Already have an account? Login!
-                                </a>
-                            </div>
-                        </form>
+    <div>
+        <template v-if="isLoading">
+            <Loader />
+        </template>
+        <div class="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+            <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
+                <div class="text-center py-2 flex justify-center">
+                    <img src="https://www.jatri.co/src/images/logo/logo.svg" class="h-16 " alt="">
+                </div>
+                <form @submit.prevent="loginHandler" class="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
+                    <div class="px-5 py-7">
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block">E-mail</label>
+                        <input type="text" v-model="userData.email"
+                            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
+                        <label class="font-semibold text-sm text-gray-600 pb-1 block">Password</label>
+                        <input type="password" v-model="userData.password"
+                            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
+                        <button type="submit"
+                            class=" transition duration-200 bg-primary hover:bg-primary-light focus:bg-primary focus:shadow-sm focus:ring-4 focus:ring-primary-light focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                            <span class="inline-block mr-2">Login</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-4 h-4 inline-block">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+                <div v-if="isError" class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                    <p class="font-bold" v-if="error?.message">{{ error.message }}</p>
+                    <!-- <p >Something not ideal might be happening.</p> -->
+                </div>
+                <div class="py-5">
+                    <div class="grid grid-cols-2 gap-1">
+                        <div class="text-center sm:text-left whitespace-nowrap">
+                            <button
+                                class="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" class="w-4 h-4 inline-block align-text-top">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                <RouterLink to="/" class="inline-block ml-1">Back to home</RouterLink>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
 </template>
