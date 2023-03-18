@@ -33,6 +33,15 @@ const router = createRouter({
         middleware: [auth]
       }
     
+    },
+    {
+      path: '/blog-create',
+      name: 'blogCreate',
+      component: () => import('../views/blogs/BlogCreate.vue'),
+      meta: {
+        middleware: [auth]
+      }
+    
     }
   ]
 })

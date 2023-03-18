@@ -14,7 +14,7 @@ export default {
         try {
             console.log(dataObj, "dataObj");
             const response = await axios.get(path, dataObj);
-            console.log(response.data.data, "respose");
+           
 
             if (response?.data?.data) {
                 await commit('SET_IS_SUCCESS', {dataFor: 'blogs', value: true});

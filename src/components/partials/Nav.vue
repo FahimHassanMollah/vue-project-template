@@ -5,10 +5,10 @@ import { RouterLink } from 'vue-router'
 
 <template>
     <!-- Navbar -->
-    <nav class=" py-4 bg-white/80
+    <nav class="py-4 bg-white/80
                         backdrop-blur-md shadow-md w-full fixed top-0 left-0 right-0 z-10">
 
-        <div class="px-2 sm:px-0 container mx-auto flex items-center">
+        <div class="container mx-auto flex items-center">
             <!-- Logo Container -->
             <div class="flex items-center">
                 <!-- Logo -->
