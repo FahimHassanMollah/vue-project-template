@@ -32,6 +32,9 @@ const auth = {
         authToken(state) {
             return state.authToken;
         },
+        isAuthenticated(state) {
+            return !!state.authToken.accessToken;
+        }
 
     },
     mutations: {

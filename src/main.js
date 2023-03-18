@@ -27,7 +27,7 @@ store.subscribe((mutation, state) => {
         }
 
     }
-    if (mutation.type === 'login/SET_AUTH_USER') {
+    if (mutation.type === 'auth/SET_AUTH_USER') {
 
         let authId = mutation.payload?.id ?? null;
         if (authId) {
