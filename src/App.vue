@@ -17,16 +17,8 @@ import { RouterLink, RouterView } from 'vue-router'
   
 /*multi select border color change on focus starts */
 
-.multiselect__tags:focus-within {
-    border-color: #ef4935;
-}
 
-.multiselect__tags {
-    overflow: hidden !important;
-    min-height: 38px !important;
-    /* max-height: 38px !important; */
-    border-color: #dfe3e7;
-}
+
 
 /* select tag css */
 .multiselect__option--selected.multiselect__option--highlight {
@@ -43,7 +35,19 @@ import { RouterLink, RouterView } from 'vue-router'
     overflow: visible !important;
     /* max-height: auto !important; */
     /* max-height: 38px !important; */
-    border-color: #dfe3e7;
+    /* border-color: #dfe3e7; */
+    border: 1px solid #e8e8e8;
+}
+.multiselect__tags:focus-within {
+    border: 1px solid #ef4935 !important;
+    /* border-color: #ef4935 !important; */
+}
+.multiselect__tags:focus {
+    border: 1px solid #ef4935 !important;
+    /* border-color: #ef4935 !important; */
+}
+.multiselect__tags:focus{
+    border: 1px solid #ef4935;
 }
 </style>
 
