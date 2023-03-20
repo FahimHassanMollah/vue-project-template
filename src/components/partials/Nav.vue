@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router'
                 <!-- Logo -->
                 <a class="cursor-pointer">
                     <h3 class="text-2xl font-medium text-blue-500">
-                        <img class="h-10" src="https://www.jatri.co/src/images/logo/logo.svg" alt="Logo">
+                        <img class="h-10" src="https://www.jatri.co/_nuxt/logo.8ff6666c.svg" alt="Logo">
                     </h3>
                 </a>
             </div>
