@@ -6,6 +6,7 @@ const auth = {
     namespaced: true,
     state: {
         blogs: [],
+        blog:null,
         blogCategories: [],
         blogTags: [],
         status: {
@@ -27,10 +28,17 @@ const auth = {
                 isError: false,
                 error: null,
             },
+            blog: {
+                isSuccess: false,
+                isLoading: false,
+                isError: false,
+                error: null,
+            }
 
         },
     },
     getters: {
+        
         blogs(state) {
             return state.blogs;
         },
@@ -48,6 +56,12 @@ const auth = {
         },
         blogTagsStatus(state) {
             return state.status.blogTags;
+        },
+        blog(state) {
+            return state.blog;
+        },
+        blogStatus(state) {
+            return state.status.blog;
         }
 
     },
@@ -63,6 +77,9 @@ const auth = {
         },
         SET_IS_SUCCESS(state, {dataFor, value}) {
             state.status[dataFor].isSuccess = value;
+        },
+        SET_BLOG(state, blog) {
+            state.blog = blog
         },
         SET_BLOGS(state, blogs) {
             state.blogs = blogs
