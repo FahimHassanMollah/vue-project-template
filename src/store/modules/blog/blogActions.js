@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useToast } from "vue-toast-notification";
+import router from "../../../router";
 const $toast = useToast();
 export default {
     async getAllBlogs({ commit }, dataObj) {
@@ -189,6 +190,67 @@ export default {
             await commit('SET_IS_SUCCESS',{dataFor: 'blog', value: false});
 
             const errorData = {};
+            if (error?.response?.data?.message) {
+                $toast.open({
+                    message: `${error.response.data.message}`,
+                    type: 'error',
+                });
+                errorData.message = error?.response?.data?.message;
+
+            }else {
+                if (error?.message) {
+                    $toast.open({
+                        message: `${error.message}`,
+                        type: 'error',
+                    });
+                    errorData.message = error.message;
+    
+                }
+            }
+            
+            if (error?.response?.data?.errors) {
+                errorData.errors = error.response.data.errors;
+
+            }
+            await commit('SET_ERROR',{dataFor: 'blog', value: errorData} );
+        }
+    },
+    async getBlog({ commit }, dataObj) {
+
+        commit('SET_IS_LOADING', {dataFor: 'blog', value: true});
+        commit('SET_IS_ERROR', {dataFor: 'blog', value: false});
+        commit('SET_BLOG', []);
+        commit('SET_IS_SUCCESS', {dataFor: 'blog', value: false});
+
+        const path = `v1/blogs/${dataObj.id}`;
+
+        try {
+            console.log(dataObj, "dataObj");
+            const response = await axios.get(path);
+           
+
+            if (response?.data?.data) {
+                await commit('SET_IS_SUCCESS', {dataFor: 'blog', value: true});
+                await commit('SET_BLOG', response.data.data);
+            }
+            commit('SET_IS_LOADING', {dataFor: 'blog', value: false});
+
+         
+        
+        } catch (error) {
+            commit('SET_IS_LOADING', {dataFor: 'blog', value: false});
+            commit('SET_IS_ERROR', {dataFor: 'blog', value: true});
+            await commit('SET_IS_SUCCESS',{dataFor: 'blog', value: false});
+
+            const errorData = {};
+            if (error.response.status === 404) {
+                $toast.open({
+                    message: `Page not found`,
+                    type: 'error',
+                });
+                router.push({ name: 'notFound' })
+                return;
+            }
             if (error?.response?.data?.message) {
                 $toast.open({
                     message: `${error.response.data.message}`,

@@ -3,7 +3,7 @@ import auth from '../middleware/auth';
 import middlewarePipeline from './helper/middlewarePipeline';
 import store from '../store';
 import guest from '../middleware/guest';
-
+import PageNotFound from '../components/partials/PageNotFound.vue' 
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,7 +42,17 @@ const router = createRouter({
         middleware: [auth]
       }
     
-    }
+    },
+    {
+      path: '/blog-edit/:id',
+      name: 'blogEdit',
+      component: () => import('../views/blogs/BlogEdit.vue'),
+      meta: {
+        middleware: [auth]
+      }
+    
+    },
+    { path: '/:pathMatch(.*)*',name:'notFound', component: PageNotFound },
   ]
 })
 

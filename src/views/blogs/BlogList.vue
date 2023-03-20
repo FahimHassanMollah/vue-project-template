@@ -44,7 +44,8 @@ const getAllBlogsHandler = async () => {
 
 }
 
-const singleBlogViewModalOpen = (blogId) => {
+const singleBlogViewModalOpen =  (blogId) => {
+    store.commit('blog/SET_BLOG', blogs.value.find(singleBlog=>singleBlog.id === blogId));
     isBlogModalOpen.value = true;
 }
 
